@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#faf9f7">
+<meta name="description" content="予算を設定して、セール中のゲーミングデスクトップPCを楽天市場から一発検索">
+<title>ゲーミングPC セールサーチ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #faf9f7;
+  --bg2:    #f3f1ed;
+  --card:   #ffffff;
+  --border: #e8e4dc;
+  --border2:#d4cfc5;
+  --text:   #1a1814;
+  --muted:  #8c8880;
+  --accent: #c84b20;
+  --accent2:#e8651a;
+  --green:  #1a7a4a;
+  --blue:   #1e5fa8;
+  --warn:   #9a6000;
+  --r:      10px;
+  --r-lg:   16px;
+  --r-pill: 999px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow2: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 19px;
+  color: var(--text);
+  flex: 1;
+  letter-spacing: -0.3px;
+}
+.header-logo span { color: var(--accent); }
+.header-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none; background: transparent;
+  color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: .15s;
+}
+.header-btn:hover { background: var(--bg2); color: var(--text); }
+
+/* ── STATUS ── */
+.statusbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+.sdot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  animation: blink 2.5s infinite;
+}
+.sdot.loading { background: var(--warn); animation: blink .6s infinite; }
+.sdot.err { background: var(--accent); animation: none; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+.stext { flex: 1; }
+
+/* ── PROGRESS ── */
+.pbar {
+  position: fixed; top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  z-index: 999; width: 0; transition: width .4s;
+}
+
+/* ── MAIN ── */
+.wrap { max-width: 640px; margin: 0 auto; padding: 16px 14px 88px; }
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 28px 16px 24px;
+  margin-bottom: 4px;
+}
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.hero-title em { color: var(--accent); font-style: italic; }
+.hero-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── PANEL ── */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.panel-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.panel-label svg { flex-shrink: 0; }
+
+/* ── BUDGET ── */
+.budget-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.budget-yen {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--muted);
+}
+.budget-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -1px;
+  min-width: 180px;
+}
+.budget-unit {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.budget-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  outline: none;
+  margin-bottom: 6px;
+}
+.budget-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(200,75,32,.3);
+}
+.budget-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── CHIPS ── */
+.fsec { margin-bottom: 14px; }
+.fsec:last-child { margin-bottom: 0; }
+.fsec-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 5px 13px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--border2);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: .15s;
+  white-space: nowrap;
+  user-select: none;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.chip:hover { border-color: var(--accent2); color: var(--text); }
+.chip.on {
+  background: #fff4ef;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── FILTER TOGGLE ── */
+.filter-panel { margin-bottom: 12px; }
+.filter-toggle-btn {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  transition: .15s;
+  box-shadow: var(--shadow);
+}
+.filter-toggle-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-toggle-btn svg { flex-shrink: 0; }
+.filter-toggle-label { flex: 1; text-align: left; }
+.filter-count-badge {
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  font-family: 'DM Mono', monospace;
+}
+.filter-chevron { transition: transform .3s; color: var(--muted); }
+.filter-chevron.open { transform: rotate(180deg); }
+
+.filter-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .35s ease;
+}
+.filter-body.open { max-height: 1400px; }
+.filter-inner {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+
+.range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.rname { font-size: 12px; color: var(--muted); width: 56px; flex-shrink: 0; }
+.frange {
+  flex: 1;
+  -webkit-appearance: none; appearance: none;
+  height: 3px; background: var(--border2); border-radius: 2px; outline: none;
+}
+.frange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px; height: 15px;
+  border-radius: 50%; background: var(--green); cursor: pointer;
+}
+.rval { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green); min-width: 50px; text-align: right; }
+
+.filter-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 9px 14px; border-radius: var(--r);
+  font-family: 'Noto Sans JP', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; transition: .15s;
+}
+.btn-pri { flex: 1; background: var(--accent); color: white; }
+.btn-pri:hover { background: var(--accent2); }
+.btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
+.btn-ghost:hover { background: var(--bg2); color: var(--text); }
+
+/* ── SEARCH BUTTON ── */
+.search-btn {
+  width: 100%;
+  background: var(--text);
+  color: white;
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  letter-spacing: .5px;
+  padding: 15px;
+  border: none;
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(26,24,20,.25);
+  transition: .2s;
+}
+.search-btn:hover { background: #2d2b26; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(26,24,20,.3); }
+.search-btn:active { transform: scale(.98); }
+.search-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.search-btn-icon { font-size: 20px; }
+
+/* ── THINKING ── */
+.thinking {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+.thinking.show { display: flex; }
+.tdots { display: flex; gap: 5px; }
+.tdot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: tbounce 1.2s infinite;
+}
+.tdot:nth-child(2) { animation-delay: .2s; background: var(--accent2); }
+.tdot:nth-child(3) { animation-delay: .4s; background: var(--muted); }
+@keyframes tbounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+.ttext { font-size: 13px; color: var(--muted); }
+
+/* ── RESULTS HEADER ── */
+.res-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.res-count { font-size: 13px; color: var(--muted); }
+.res-count strong { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
+.sort-sel {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: var(--r); color: var(--text); font-size: 12px;
+  padding: 5px 8px; outline: none; cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* ── PC CARD ── */
+.pc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow);
+  transition: .2s;
+}
+.pc-card:hover { border-color: var(--border2); box-shadow: var(--shadow2); transform: translateY(-2px); }
+
+.sale-stripe {
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+
+.disc-badge {
+  position: absolute;
+  top: 13px; right: 13px;
+  background: var(--accent);
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+}
+
+.pc-body { padding: 14px; }
+
+.pc-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+.source-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--accent);
+}
+
+.pc-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+  padding-right: 64px;
+}
+
+.pc-specs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.stag {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  color: var(--muted);
+  padding: 2px 8px;
+  font-family: 'DM Mono', monospace;
+}
+.stag.gpu {
+  background: #fff4ef;
+  border-color: rgba(200,75,32,.25);
+  color: var(--accent);
+}
+
+.pc-price-row {
+  display: flex; align-items: flex-end; gap: 12px; margin-bottom: 8px;
+}
+.pc-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: 30px;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.pc-orig {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-bottom: 2px;
+}
+.pc-save {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.pc-rating {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 12px; color: #d4900a; margin-bottom: 8px;
+}
+.pc-rating span { color: var(--muted); font-family: 'DM Mono', monospace; }
+
+.pc-footer { display: flex; gap: 7px; }
+.btn-buy {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 10px;
+  border-radius: var(--r);
+  background: var(--text); color: white;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: .15s; font-family: 'Noto Sans JP', sans-serif;
+}
+.btn-buy:hover { background: #2d2b26; }
+.btn-info {
+  width: 40px; height: 40px;
+  border-radius: var(--r); border: 1px solid var(--border2);
+  background: transparent; color: var(--muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0; transition: .15s;
+}
+.btn-info:hover { background: var(--bg2); color: var(--text); }
+
+/* ── IMAGE ── */
+.pc-image {
+  width: 72px; height: 72px;
+  object-fit: contain;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+}
+.pc-body-inner { display: flex; gap: 12px; }
+.pc-body-text { flex: 1; min-width: 0; }
+
+/* ── MORE BANNER ── */
+.more-banner {
+  display: none;
+  background: var(--card);
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  margin-bottom: 14px;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+.more-banner.show { display: flex; }
+.more-title { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--text); }
+.more-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.more-actions { display: flex; gap: 8px; justify-content: center; }
+.btn-more {
+  padding: 9px 20px; border-radius: var(--r);
+  background: var(--text); color: white;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; border: none; transition: .15s;
+  font-family: 'Noto Sans JP', sans-serif;
+  display: flex; align-items: center; gap: 5px;
+}
+.btn-more:hover { background: #2d2b26; }
+.btn-done {
+  padding: 9px 16px; border-radius: var(--r);
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--muted); font-size: 13px; cursor: pointer;
+  transition: .15s; font-family: 'Noto Sans JP', sans-serif;
+  display: flex; align-items: center; gap: 5px;
+}
+.btn-done:hover { background: var(--bg2); color: var(--text); }
+
+/* ── EMPTY ── */
+.empty { text-align: center; padding: 48px 24px; }
+.empty-icon { font-size: 52px; color: var(--muted); opacity: .3; margin-bottom: 12px; }
+.empty h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 6px; }
+.empty p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── DRAWER ── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.overlay.open { opacity: 1; pointer-events: all; }
+.drawer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--card); border-radius: 20px 20px 0 0;
+  padding: 20px; z-index: 210;
+  transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  max-height: 82vh; overflow-y: auto;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.15);
+}
+.drawer.open { transform: translateY(0); }
+.drawer-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 14px; }
+.drawer-close {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--bg2); border: none; border-radius: 50%;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 17px; color: var(--muted);
+}
+.drawer-close:hover { background: var(--border2); color: var(--text); }
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+.spec-cell { background: var(--bg2); border-radius: var(--r); padding: 10px 12px; }
+.spec-cell-label { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 3px; }
+.spec-cell-val { font-size: 13px; font-weight: 500; color: var(--text); }
+
+/* ── SNACKBAR ── */
+.snack {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--text); color: white;
+  padding: 10px 20px; border-radius: var(--r-lg);
+  font-size: 12px; z-index: 500; transition: .3s;
+  white-space: nowrap; max-width: calc(100vw - 28px);
+  text-align: center; box-shadow: var(--shadow2);
+}
+.snack.show { transform: translateX(-50%) translateY(0); }
+
+/* ── FOOTER NOTE ── */
+.footer-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 16px;
+  line-height: 1.7;
+  font-family: 'DM Mono', monospace;
+}
+.footer-note a { color: var(--muted); text-decoration: underline; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="pbar" id="pbar"></div>
+
+<header class="header">
+  <span style="font-size:22px">🎮</span>
+  <div class="header-logo">ゲーミングPC <span>セールサーチ</span></div>
+  <button class="header-btn" onclick="toggleFilters()" title="絞り込み" aria-label="絞り込み">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+  </button>
+</header>
+
+<div class="statusbar">
+  <div class="sdot" id="sdot"></div>
+  <span class="stext" id="stext">楽天市場からリアルタイムでセール情報を取得します</span>
+</div>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Gaming PC Sale Search</div>
+    <h1 class="hero-title">予算内の<em>セール中</em><br>ゲーミングPCを探す</h1>
+    <p class="hero-sub">楽天市場の商品を即時検索。インストール不要。</p>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="panel">
+    <div class="panel-label">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8l-2 4h12z"/></svg>
+      予算の上限
+    </div>
+    <div class="budget-display">
+      <span class="budget-yen">¥</span>
+      <span class="budget-num" id="budgetNum">200,000</span>
+    </div>
+    <input type="range" class="budget-slider" id="budgetSlider"
+      min="50000" max="1000000" step="10000" value="200000"
+      oninput="updateBudget(this.value)" aria-label="予算スライダー">
+    <div class="budget-ticks">
+      <span>¥5万</span>
+      <span>¥25万</span>
+      <span>¥50万</span>
+      <span>¥75万</span>
+      <span>¥100万</span>
+    </div>
+  </div>
+
+  <!-- QUICK GPU FILTER -->
+  <div class="panel">
+    <div class="panel-label">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="12" x2="8" y2="12" stroke-width="3"/><line x1="12" y1="12" x2="12" y2="12" stroke-width="3"/><line x1="16" y1="12" x2="16" y2="12" stroke-width="3"/></svg>
+      GPUで絞り込む（任意）
+    </div>
+    <div class="chips">
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 4060</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 4070</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 4070 Ti</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 4080</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 4090</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 5070</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RTX 5080</span>
+      <span class="chip" onclick="toggleChip(this,'gpu')">RX 7800 XT</span>
+    </div>
+  </div>
+
+  <!-- MORE FILTERS (COLLAPSIBLE) -->
+  <div class="filter-panel">
+    <button class="filter-toggle-btn" onclick="toggleFilters()" aria-expanded="false" id="filterToggleBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      <span class="filter-toggle-label">詳細な絞り込み条件</span>
+      <span class="filter-count-badge" id="filterBadge" style="display:none">0</span>
+      <svg class="filter-chevron" id="filterChevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="filter-body" id="filterBody">
+      <div class="filter-inner">
+        <div class="fsec">
+          <div class="fsec-title">CPU</div>
+          <div class="chips">
+            <span class="chip" onclick="toggleChip(this,'cpu')">Core i5</span>
+            <span class="chip" onclick="toggleChip(this,'cpu')">Core i7</span>
+            <span class="chip" onclick="toggleChip(this,'cpu')">Core i9</span>
+            <span class="chip" onclick="toggleChip(this,'cpu')">Ryzen 5</span>
+            <span class="chip" onclick="toggleChip(this,'cpu')">Ryzen 7</span>
+            <span class="chip" onclick="toggleChip(this,'cpu')">Ryzen 9</span>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="fsec-title">メモリ</div>
+          <div class="chips">
+            <span class="chip" onclick="toggleChip(this,'ram')">16GB</span>
+            <span class="chip" onclick="toggleChip(this,'ram')">32GB</span>
+            <span class="chip" onclick="toggleChip(this,'ram')">64GB以上</span>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="fsec-title">ストレージ</div>
+          <div class="chips">
+            <span class="chip" onclick="toggleChip(this,'storage')">SSD 512GB</span>
+            <span class="chip" onclick="toggleChip(this,'storage')">SSD 1TB</span>
+            <span class="chip" onclick="toggleChip(this,'storage')">SSD 2TB以上</span>
+            <span class="chip" onclick="toggleChip(this,'storage')">HDD 1TB以上</span>
+            <span class="chip" onclick="toggleChip(this,'storage')">SSD+HDD</span>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="fsec-title">ブランド</div>
+          <div class="chips">
+            <span class="chip" onclick="toggleChip(this,'brand')">ASUS ROG</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">MSI</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">Lenovo</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">Dell Alienware</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">HP OMEN</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">マウスコンピューター</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">ドスパラ</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">パソコン工房</span>
+            <span class="chip" onclick="toggleChip(this,'brand')">FRONTIER</span>
+          </div>
+        </div>
+        <div class="fsec">
+          <div class="fsec-title">評価フィルター</div>
+          <div style="padding-top:4px">
+            <div class="range-row">
+              <span class="rname">最低評価</span>
+              <input type="range" class="frange" id="ratingRange" min="0" max="5" step="0.5" value="0" oninput="updateRange('rating',this.value)">
+              <span class="rval" id="ratingVal">指定なし</span>
+            </div>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn btn-ghost" onclick="clearFilters()">リセット</button>
+          <button class="btn btn-pri" onclick="applyAndClose()">この条件で検索</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <button class="search-btn" id="searchBtn" onclick="doSearch()">
+    <span class="search-btn-icon">🔍</span>
+    セール中のゲーミングPCを検索
+  </button>
+
+  <!-- THINKING -->
+  <div class="thinking" id="thinking">
+    <div class="tdots">
+      <div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>
+    </div>
+    <span class="ttext" id="ttext">楽天市場を検索中...</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsSection" style="display:none">
+    <div class="res-header">
+      <div class="res-count"><strong id="resCount">0</strong> 件見つかりました</div>
+      <select class="sort-sel" id="sortSel" onchange="renderResults(allResults)">
+        <option value="price_asc">価格が安い順</option>
+        <option value="price_desc">価格が高い順</option>
+        <option value="rating">評価が高い順</option>
+        <option value="review">レビュー数順</option>
+      </select>
+    </div>
+    <div id="resultsList"></div>
+  </div>
+
+  <!-- MORE BANNER -->
+  <div class="more-banner" id="moreBanner">
+    <div class="more-title">もっと見る？</div>
+    <div class="more-desc" id="moreDesc">現在 <strong id="moreCount">0</strong> 件を表示中。<br>次のページを読み込んでさらに製品を探せます。</div>
+    <div class="more-actions">
+      <button class="btn-more" onclick="loadMore()">
+        <span>＋</span> さらに読み込む
+      </button>
+      <button class="btn-done" onclick="dismissMore()">
+        <span>✓</span> これで十分
+      </button>
+    </div>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="empty" id="emptyState">
+    <div class="empty-icon">🎮</div>
+    <h3>ゲーミングPCのセールを探そう</h3>
+    <p>予算を設定して検索ボタンを押すだけ。<br>楽天市場からリアルタイムで情報を取得します。</p>
+  </div>
+
+  <div class="footer-note">
+    楽天市場の商品情報をリアルタイム表示 / 価格・在庫は購入ページでご確認ください<br>
+    <a href="https://ichiba.rakuten.co.jp/" target="_blank" rel="noopener">楽天市場</a>
+  </div>
+
+</main>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  <div id="drawerContent"></div>
+</div>
+
+<div class="snack" id="snack"></div>
+
+<script>
+// ── STATE ──
+let budget = 200000;
+let filters = { gpu:[], cpu:[], ram:[], storage:[], brand:[], rating:0 };
+let allResults = [];
+let currentPage = 1;
+let totalPages = 1;
+let isSearching = false;
+
+// ── BUDGET ──
+function updateBudget(v) {
+  budget = parseInt(v);
+  document.getElementById('budgetNum').textContent = budget.toLocaleString('ja-JP');
+}
+
+// ── FILTERS ──
+let filtersOpen = false;
+function toggleFilters() {
+  filtersOpen = !filtersOpen;
+  document.getElementById('filterBody').classList.toggle('open', filtersOpen);
+  document.getElementById('filterChevron').classList.toggle('open', filtersOpen);
+  document.getElementById('filterToggleBtn').setAttribute('aria-expanded', filtersOpen);
+}
+function applyAndClose() {
+  if (filtersOpen) toggleFilters();
+  doSearch();
+}
+
+function toggleChip(el, cat) {
+  el.classList.toggle('on');
+  const v = el.textContent.trim();
+  const a = filters[cat];
+  const i = a.indexOf(v);
+  i >= 0 ? a.splice(i,1) : a.push(v);
+  updateFilterBadge();
+}
+function updateFilterBadge() {
+  const n = filters.gpu.length + filters.cpu.length + filters.ram.length +
+    filters.storage.length + filters.brand.length + (filters.rating > 0 ? 1 : 0);
+  const badge = document.getElementById('filterBadge');
+  badge.style.display = n > 0 ? '' : 'none';
+  badge.textContent = n;
+}
+function updateRange(type, v) {
+  filters[type] = parseFloat(v);
+  document.getElementById('ratingVal').textContent = parseFloat(v) === 0 ? '指定なし' : '★' + v + '以上';
+  updateFilterBadge();
+}
+function clearFilters() {
+  document.querySelectorAll('.chip.on').forEach(c => c.classList.remove('on'));
+  filters = { gpu:[], cpu:[], ram:[], storage:[], brand:[], rating:0 };
+  document.getElementById('ratingRange').value = 0;
+  document.getElementById('ratingVal').textContent = '指定なし';
+  updateFilterBadge();
+  snack('フィルターをリセットしました');
+}
+
+// ── BUILD KEYWORD ──
+function buildKeyword() {
+  let parts = ['ゲーミングデスクトップ'];
+  if (filters.gpu.length) parts.push(filters.gpu[0]);
+  if (filters.cpu.length) parts.push(filters.cpu[0]);
+  if (filters.ram.length) parts.push(filters.ram[0]);
+  if (filters.brand.length) parts.push(filters.brand[0]);
+  return parts.join(' ');
+}
+
+// ── SEARCH ──
+async function doSearch() {
+  if (isSearching) return;
+  isSearching = true;
+  currentPage = 1;
+  allResults = [];
+
+  document.getElementById('searchBtn').disabled = true;
+  document.getElementById('thinking').classList.add('show');
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('moreBanner').classList.remove('show');
+  setStatus('loading', '楽天市場を検索中...');
+  animPbar();
+
+  const msgs = ['楽天市場を検索中...', 'ゲーミングPCを探しています...', '条件に合う製品を確認中...', 'もう少しお待ちください...'];
+  let mi = 0;
+  const iv = setInterval(() => { document.getElementById('ttext').textContent = msgs[mi++ % msgs.length]; }, 2000);
+
+  try {
+    const data = await fetchSearch(buildKeyword(), budget, 1);
+    clearInterval(iv);
+    allResults = data.items.map(parseItem);
+    totalPages = data.pageCount || 1;
+    renderResults(allResults);
+    setStatus('ok', `${data.count.toLocaleString('ja-JP')}件中 ${allResults.length}件を表示`);
+    if (totalPages > 1) showMoreBanner();
+  } catch(e) {
+    clearInterval(iv);
+    setStatus('err', 'エラーが発生しました');
+    document.getElementById('emptyState').style.display = '';
+    document.getElementById('emptyState').innerHTML = `<div class="empty-icon">⚠️</div><h3>検索に失敗しました</h3><p>${esc(e.message)}<br><br>ページを再読み込みしてもう一度お試しください。</p>`;
+  }
+
+  document.getElementById('thinking').classList.remove('show');
+  document.getElementById('searchBtn').disabled = false;
+  isSearching = false;
+  resetPbar();
+}
+
+async function loadMore() {
+  if (isSearching || currentPage >= totalPages) return;
+  isSearching = true;
+  currentPage++;
+  document.getElementById('moreBanner').classList.remove('show');
+  document.getElementById('thinking').classList.add('show');
+  setStatus('loading', `ページ ${currentPage} を読み込み中...`);
+  animPbar();
+
+  try {
+    const data = await fetchSearch(buildKeyword(), budget, currentPage);
+    const before = allResults.length;
+    const newItems = data.items.map(parseItem);
+    allResults = dedup([...allResults, ...newItems]);
+    renderResults(allResults);
+    setStatus('ok', `${allResults.length}件を表示中（計 ${data.count.toLocaleString('ja-JP')}件）`);
+    snack(`${allResults.length - before}件追加しました`);
+    if (currentPage < totalPages) showMoreBanner();
+    else snack('すべての結果を読み込みました');
+  } catch(e) {
+    setStatus('ok', `${allResults.length}件を表示中`);
+    snack('読み込みに失敗しました。もう一度お試しください。');
+    showMoreBanner();
+  }
+
+  document.getElementById('thinking').classList.remove('show');
+  isSearching = false;
+  resetPbar();
+}
+
+// ── API CALL ──
+async function fetchSearch(keyword, maxPrice, page) {
+  const params = new URLSearchParams({ keyword, maxPrice, page });
+  const res = await fetch(`/api/search?${params}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// ── PARSE ──
+function parseItem(item) {
+  const name = item.itemName || '';
+  const caption = item.itemCaption || '';
+  const full = name + ' ' + caption;
+  return {
+    id: name + item.itemPrice,
+    name,
+    shop: item.shopName || '楽天市場',
+    shopUrl: item.itemUrl || '',
+    salePrice: item.itemPrice || 0,
+    gpu: extractSpec(full, ['RTX 4090','RTX 4080 SUPER','RTX 4080','RTX 4070 Ti SUPER','RTX 4070 Ti','RTX 4070 SUPER','RTX 4070','RTX 4060 Ti','RTX 4060','RTX 5090','RTX 5080','RTX 5070 Ti','RTX 5070','RTX 3090','RTX 3080','RTX 3070','RTX 3060','RX 7900 XTX','RX 7900 XT','RX 7800 XT','RX 7700 XT','RX 7600']),
+    cpu: extractSpec(full, ['Core i9-14','Core i9-13','Core i9','Core i7-14','Core i7-13','Core i7','Core i5-14','Core i5-13','Core i5','Ryzen 9 7950','Ryzen 9 7900','Ryzen 9 5950','Ryzen 9 5900','Ryzen 9','Ryzen 7 7800','Ryzen 7 7700','Ryzen 7 5800','Ryzen 7','Ryzen 5 7600','Ryzen 5 5600','Ryzen 5']),
+    ram: extractRAM(full),
+    storage: extractStorage(full),
+    rating: item.reviewAverage || 0,
+    reviewCount: item.reviewCount || 0,
+    imageUrl: item.imageUrl || null,
+  };
+}
+
+function extractSpec(t, specs) { for (const s of specs) if (t.includes(s)) return s; return null; }
+function extractRAM(t) {
+  const m = t.match(/(\d+)\s*GB\s*(メモリ|RAM|DDR[45]?)/i) || t.match(/(メモリ|RAM)\s*(\d+)\s*GB/i);
+  if (m) { const g = parseInt(m[1]||m[2]); if (g>=4&&g<=512) return g+'GB'; }
+  return null;
+}
+function extractStorage(t) {
+  const parts = [];
+  const ssd = t.match(/(\d+(?:\.\d+)?)\s*TB\s*SSD|SSD\s*(\d+(?:\.\d+)?)\s*TB|(\d+)\s*GB\s*SSD|SSD\s*(\d+)\s*GB/i);
+  const hdd = t.match(/(\d+(?:\.\d+)?)\s*TB\s*HDD|HDD\s*(\d+(?:\.\d+)?)\s*TB/i);
+  if (ssd) parts.push(ssv(ssd)+' SSD');
+  if (hdd) parts.push(ssv(hdd)+' HDD');
+  return parts.length ? parts.join(' + ') : null;
+}
+function ssv(m) { for (let i=1;i<m.length;i++) if(m[i]){const v=parseFloat(m[i]);return v>=1?v+'TB':Math.round(v*1000)+'GB';} return '?'; }
+function dedup(items) { const s=new Set(); return items.filter(x=>{if(s.has(x.id))return false;s.add(x.id);return true;}); }
+
+// ── FILTER/SORT ──
+function applyFilters(items) {
+  let r = [...items];
+  if (filters.gpu.length) r = r.filter(x => x.gpu && filters.gpu.some(g => x.gpu.includes(g.replace(/RTX |RX /,''))));
+  if (filters.cpu.length) r = r.filter(x => x.cpu && filters.cpu.some(c => x.cpu.includes(c.replace(/Core |Ryzen /,''))));
+  if (filters.ram.length) r = r.filter(x => x.ram && filters.ram.some(rv => {
+    if (rv==='64GB以上') return parseInt(x.ram)>=64;
+    return x.ram.includes(rv.replace('GB',''));
+  }));
+  if (filters.storage.length) r = r.filter(x => x.storage && filters.storage.some(sv => {
+    const st = x.storage.toLowerCase();
+    if (sv==='SSD 512GB') return st.includes('ssd')&&(st.includes('512gb')||st.includes('512 gb'));
+    if (sv==='SSD 1TB') return st.includes('ssd')&&(st.includes('1tb')||st.includes('1 tb'));
+    if (sv==='SSD 2TB以上') return st.includes('ssd')&&/[2-9]\d*tb/.test(st);
+    if (sv==='HDD 1TB以上') return st.includes('hdd')&&/[1-9]\d*tb/.test(st);
+    if (sv==='SSD+HDD') return st.includes('ssd')&&st.includes('hdd');
+    return false;
+  }));
+  if (filters.brand.length) r = r.filter(x => filters.brand.some(b => x.name.includes(b)||x.shop.includes(b)));
+  if (filters.rating > 0) r = r.filter(x => x.rating >= filters.rating);
+  return r;
+}
+function sortItems(items) {
+  const s = document.getElementById('sortSel').value;
+  return [...items].sort((a,b) => {
+    if (s==='price_asc') return a.salePrice-b.salePrice;
+    if (s==='price_desc') return b.salePrice-a.salePrice;
+    if (s==='rating') return b.rating-a.rating;
+    if (s==='review') return b.reviewCount-a.reviewCount;
+    return 0;
+  });
+}
+
+// ── RENDER ──
+function renderResults(items) {
+  const list = applyFilters(sortItems(items));
+  document.getElementById('resCount').textContent = list.length;
+  document.getElementById('resultsSection').style.display = 'block';
+  const el = document.getElementById('resultsList');
+  if (list.length===0) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><h3>条件に合う製品がありません</h3><p>フィルターを緩めるか、予算を上げて再検索してみてください。</p></div>';
+    return;
+  }
+  el.innerHTML = list.map((r,i) => cardHTML(r,i)).join('');
+}
+
+function cardHTML(r,i) {
+  const img = r.imageUrl ? `<img class="pc-image" src="${esc(r.imageUrl)}" alt="${esc(r.name)}" loading="lazy" onerror="this.style.display='none'">` : '';
+  return `<div class="pc-card">
+  <div class="sale-stripe"></div>
+  <div class="pc-body">
+    <div class="pc-body-inner">
+      ${img}
+      <div class="pc-body-text">
+        <div class="pc-source"><span class="source-dot"></span>${esc(r.shop)} — 楽天市場</div>
+        <div class="pc-name">${esc(r.name)}</div>
+      </div>
+    </div>
+    <div class="pc-specs" style="margin-top:8px">
+      ${r.gpu?`<span class="stag gpu">${esc(r.gpu)}</span>`:''}
+      ${r.cpu?`<span class="stag">${esc(r.cpu)}</span>`:''}
+      ${r.ram?`<span class="stag">${esc(r.ram)}</span>`:''}
+      ${r.storage?`<span class="stag">${esc(r.storage)}</span>`:''}
+    </div>
+    <div class="pc-price-row">
+      <div class="pc-price">¥${r.salePrice.toLocaleString('ja-JP')}</div>
+    </div>
+    ${r.rating>0?`<div class="pc-rating">${stars(r.rating)}<span>${r.rating.toFixed(1)}</span>${r.reviewCount>0?`<span>(${r.reviewCount.toLocaleString()}件)</span>`:''}</div>`:''}
+    <div class="pc-footer">
+      <a class="btn-buy" href="${esc(r.shopUrl)}" target="_blank" rel="noopener noreferrer">
+        楽天市場で購入
+      </a>
+      <button class="btn-info" onclick="openDrawer(${i})" aria-label="詳細を見る">ℹ</button>
+    </div>
+  </div>
+</div>`;
+}
+
+function stars(r) {
+  let h='';
+  for(let i=1;i<=5;i++){
+    if(r>=i) h+='★';
+    else if(r>=i-.5) h+='<span style="opacity:.5">★</span>';
+    else h+='<span style="opacity:.2">★</span>';
+  }
+  return h;
+}
+
+// ── DRAWER ──
+function openDrawer(i) {
+  const list = applyFilters(sortItems(allResults));
+  const r = list[i]; if(!r) return;
+  document.getElementById('drawerContent').innerHTML=`
+    <div style="font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px;padding-right:28px">${esc(r.name)}</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;font-family:'DM Mono',monospace">${esc(r.shop)}</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--accent);margin-bottom:14px;letter-spacing:-1px">¥${r.salePrice.toLocaleString('ja-JP')}</div>
+    <div class="spec-grid">
+      <div class="spec-cell"><div class="spec-cell-label">GPU</div><div class="spec-cell-val">${esc(r.gpu||'—')}</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">CPU</div><div class="spec-cell-val">${esc(r.cpu||'—')}</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">メモリ</div><div class="spec-cell-val">${esc(r.ram||'—')}</div></div>
+      <div class="spec-cell"><div class="spec-cell-label">ストレージ</div><div class="spec-cell-val">${esc(r.storage||'—')}</div></div>
+    </div>
+    ${r.rating>0?`<div class="pc-rating" style="margin-bottom:14px">${stars(r.rating)}<span style="color:var(--muted)">${r.rating.toFixed(1)}</span>${r.reviewCount>0?`<span style="font-family:'DM Mono',monospace;color:var(--muted)">(${r.reviewCount.toLocaleString()}件のレビュー)</span>`:''}</div>`:''}
+    <a class="btn-buy" href="${esc(r.shopUrl)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:flex;justify-content:center">
+      楽天市場で購入する
+    </a>`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+// ── MORE ──
+function showMoreBanner() {
+  document.getElementById('moreCount').textContent = allResults.length;
+  document.getElementById('moreBanner').classList.add('show');
+}
+function dismissMore() {
+  document.getElementById('moreBanner').classList.remove('show');
+  snack('現在の検索結果を表示しています');
+}
+
+// ── STATUS ──
+function setStatus(t,msg) {
+  document.getElementById('sdot').className='sdot'+(t==='loading'?' loading':t==='err'?' err':'');
+  document.getElementById('stext').textContent=msg;
+}
+
+// ── PBAR ──
+let pbIv;
+function animPbar() {
+  let w=0; const b=document.getElementById('pbar');
+  clearInterval(pbIv);
+  pbIv=setInterval(()=>{w=Math.min(w+Math.random()*8,85);b.style.width=w+'%';if(w>=85)clearInterval(pbIv);},350);
+}
+function resetPbar() {
+  clearInterval(pbIv);
+  const b=document.getElementById('pbar');
+  b.style.width='100%';
+  setTimeout(()=>{b.style.transition='none';b.style.width='0%';setTimeout(()=>{b.style.transition='width .4s';},50);},400);
+}
+
+// ── SNACK ──
+function snack(msg) {
+  const el=document.getElementById('snack');
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+function esc(s) { if(!s)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
