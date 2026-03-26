@@ -33,13 +33,13 @@ export default async function handler(req, res) {
 
   const safeMaxPrice = Math.min(Math.max(parseInt(maxPrice) || 500000, 30000), 2000000);
   const safePage = Math.min(Math.max(parseInt(page) || 1, 1), 100);
-  const safeSort = ['-reviewCount', '+itemPrice', '-itemPrice', '-affiliateRate', '-reviewAverage'].includes(sort)
+  const safeSort = ['-reviewCount', '+itemPrice', '-itemPrice', '-reviewAverage'].includes(sort)
     ? sort : '-reviewCount';
 
   const params = new URLSearchParams({
     applicationId: appId,
     accessKey: accessKey,
-    keyword: keyword.substring(0, 128),
+    keyword: keyword.substring(0, 64),
     maxPrice: safeMaxPrice,
     minPrice: 30000,
     hits: 30,
