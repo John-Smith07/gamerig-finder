@@ -35,13 +35,12 @@ export default async function handler(req, res) {
 
   const params = new URLSearchParams({
     applicationId: appId,
-    keyword: keyword.substring(0, 128), // 長さ制限
+    keyword: keyword.substring(0, 128),
     maxPrice: safeMaxPrice,
     minPrice: 30000,
     hits: 30,
     page: safePage,
     sort: safeSort,
-    genreId: '215783', // デスクトップPC
     imageFlag: 1,
     format: 'json',
     formatVersion: 2,
