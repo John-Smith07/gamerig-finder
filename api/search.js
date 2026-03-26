@@ -52,9 +52,7 @@ export default async function handler(req, res) {
 
   // 2026年2月以降: 新エンドポイント + Refererヘッダーが必須
   const endpoint = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601';
-  const siteUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'https://gamerig-finder-app.vercel.app';
+  const siteUrl = 'https://gamerig-finder-app.vercel.app';
 
   try {
     const upstream = await fetch(`${endpoint}?${params}`, {
