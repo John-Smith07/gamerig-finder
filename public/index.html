@@ -868,9 +868,7 @@ function clearFilters() {
 // ── BUILD KEYWORD ──
 function buildKeyword() {
   let parts = ['ゲーミングデスクトップ'];
-  if (filters.gpu.length) parts.push(filters.gpu[0]);
-  if (filters.cpu.length) parts.push(filters.cpu[0]);
-  if (filters.ram.length) parts.push(filters.ram[0]);
+  // ブランド名のみ追加（日本語・英語混在でも楽天APIで問題なし）
   if (filters.brand.length) parts.push(filters.brand[0]);
   return parts.join(' ');
 }
